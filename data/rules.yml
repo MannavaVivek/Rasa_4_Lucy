@@ -1,0 +1,56 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: deal with interruption - 1
+  condition:
+    - active_loop: simple_order_form
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - action: simple_order_form
+    - active_loop: simple_order_form
+
+- rule: deal with interruption - 3
+  condition:
+    - active_loop: simple_order_form
+  steps:
+    - intent: tell_name
+    - action: utter_greet_by_name
+    - action: simple_order_form
+    - active_loop: simple_order_form
+
+- rule: deal with interruption - 4
+  condition:
+    - active_loop: simple_order_form
+  steps:
+    - intent: nlu_fallback
+    - action: action_fallback_response
+    - action: simple_order_form
+    - active_loop: simple_order_form
+
+- rule: deal with deny confirm order
+  condition:
+    - active_loop: simple_order_form
+    - slot_was_set:
+      - requested_slot: confirmation
+  steps:
+    - intent: deny
+    - action: action_clear_slots
+    - action: simple_order_form
+    - active_loop: simple_order_form
+
+- rule: Submit Order Form
+  condition:
+    - active_loop: simple_order_form
+  steps:
+    - action: simple_order_form
+    - active_loop: null
+    - action: utter_will_bring_order
+    - action: action_clear_slots
+    - action: action_restart

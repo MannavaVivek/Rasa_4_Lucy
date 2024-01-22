@@ -1,0 +1,23 @@
+version: "3.1"
+
+stories:
+
+- story: Deal starting with deny
+  steps:
+    - intent: system_scenario_one
+    - action: utter_interruption_at_start
+    - intent: deny
+    - action: utter_call_if_you_need_anything
+    - active_loop: null
+
+- story: Activate Order Form
+  steps:
+    - intent: system_scenario_one
+    - action: utter_interruption_at_start
+    - or: 
+      - intent: tell_order
+      - intent: affirm
+      - intent: greet
+    - action: simple_order_form
+    - active_loop: simple_order_form
+
